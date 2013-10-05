@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## DrexArc
+## Creates archives for submitting to submit_cli
+
+if [ -z "$1" ]; then
+    echo "Usage: drexarc DIRECTORY"
+    exit 1
+fi
+
+echo "Drexel ID:"
+read USERNAME
+
+echo "(t)ar or (z)ip: "
+read FORMAT
+
+if [ "$FORMAT" != "t" ] && [ "$FORMAT" != "z" ]; then
+    echo "Format unknown, please use the letters indicated."
+    exit 1
+fi
+
+echo "class code: "
+read CLASS
+
+echo "assignment code: "
+read ASSIGNMENT
+
+OUTPUT="$CLASS-$USERNAME-$ASSIGNMENT"
+TMPDIR="$OUTPUT/"
+
+cp -R "$1" $TMPDIR
+
+if [ "$FORMAT" == "t" ];  then
+    tar -cvf "$OUTPUT.tar" "$TMPDIR"
+fi
+
+if [ "$FORMAT" == "z" ]; then
+    zip -r "$OUTPUT.zip" "$TMPDIR"
+fi
+
+rm -rf $TMPDIR
